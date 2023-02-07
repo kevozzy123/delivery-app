@@ -7,10 +7,10 @@ interface AuthInput {
 }
 
 const apiUrl = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:4000' : process.env.REACT_APP_API_URL
+    ? 'https://elm.cangdu.org/v1/cities' : 'https://elm.cangdu.org/v1/cities'
 
 export const getToken = () => {
-    localStorage.getItem('user') ?
+    return localStorage.getItem('user') ?
         JSON.parse(localStorage.getItem('user') as string).token : undefined
 }
 
