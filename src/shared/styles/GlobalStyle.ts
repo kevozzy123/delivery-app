@@ -5,17 +5,23 @@ import { color, font, mixin } from './styles';
 
 export default createGlobalStyle`
   html, body, #root {
+    font-family: 'Aleo', serif;
+    font-family: 'Itim', cursive;
+    font-family: 'Josefin Sans', sans-serif;
+    font-family: 'Playfair Display', serif;
+    font-family: 'Roboto', sans-serif;
     height: 100%;
-    min-height: 100%;
-    min-width: 768px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
   }
 
   body {
     color: ${color.textDarkest};
     -webkit-tap-highlight-color: transparent;
     line-height: 1.2;
-    ${font.size(24)}
-    ${font.regular}
+    ${font.size(16)}
   }
 
   #root {
@@ -28,7 +34,7 @@ export default createGlobalStyle`
   optgroup,
   select,
   textarea {
-    ${font.regular}
+    font-weight: 500;
   }
 
   *, *:after, *:before, input[type="search"] {
@@ -52,7 +58,7 @@ export default createGlobalStyle`
   }
 
   h1, h2, h3, h4, h5, h6, strong {
-    ${font.bold}
+    font-weight: 700;
   }
 
   button {

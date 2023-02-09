@@ -1,27 +1,29 @@
 import React, { Children, ReactNode, useContext } from 'react'
 
-const CityContext = React.createContext<
+const AddressContext = React.createContext<
     {
-        city: string,
-        changecity: (id: number) => void
+        address: string,
+        changeAddress: (id: number) => Promise<void>,
+        addAddress: () => Promise<void>,
+        deleteAddress: () => Promise<void>
     }
     | undefined
 >(undefined)
 
-const CityContextProvider = ({ children }: { children: ReactNode }) => {
+const addressContext = ({ children }: { children: ReactNode }) => {
     return (
-        <CityContext.Provider
+        <AddressContext.Provider
             value={undefined}
         >
             {children}
-        </CityContext.Provider>
+        </AddressContext.Provider>
     )
 }
 
-export const usecityContext = () => {
-    const context = useContext(CityContext)
+export const useAddressContext = () => {
+    const context = useContext(AddressContext)
 
     return context
 }
 
-export default CityContextProvider
+export default addressContext
