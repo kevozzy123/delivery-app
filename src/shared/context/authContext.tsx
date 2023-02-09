@@ -1,3 +1,4 @@
+import React, { ReactNode, useCallback, useContext, useState } from "react";
 import { User } from '../types/index'
 import { notification } from 'antd';
 
@@ -7,9 +8,9 @@ interface AuthInput {
 }
 
 const apiUrl = process.env.NODE_ENV === 'development'
-    ? 'https://elm.cangdu.org/v1/cities' : 'https://elm.cangdu.org/v1/cities'
+    ? 'http://localhost:4000' : process.env.REACT_APP_API_URL
 
-export const getToken = () => {
+const getToken = () => {
     return localStorage.getItem('user') ?
         JSON.parse(localStorage.getItem('user') as string).token : undefined
 }
@@ -17,10 +18,10 @@ export const getToken = () => {
 export const storeUserInfo = (user: User) => {
     let userString = JSON.stringify(user)
     localStorage.setItem('user', userString)
-    return userString
+    return user
 }
 
-export const login = (data: AuthInput) => {
+export const _login = (data: AuthInput) => {
     return fetch(`${apiUrl}/login`, {
         method: "POST",
         headers: {
@@ -36,7 +37,7 @@ export const login = (data: AuthInput) => {
     });
 }
 
-export const register = (data: AuthInput) => {
+export const _register = (data: AuthInput) => {
     return fetch(`${apiUrl}/register`, {
         method: "POST",
         headers: {
@@ -52,17 +53,50 @@ export const register = (data: AuthInput) => {
     });
 }
 
-export const logout = async () => {
+export const _logout = async () => {
     localStorage.removeItem('user')
     notification.open({
         message: 'You have been logged out'
     });
 }
 
-const authProvider = () => {
+const assignToken = async () => {
+    let user
+    const token = getToken()
+    if (token) {
+        const data = ''
+        user = data
+    }
+    return user
+}
+
+const AuthContext = React.createContext<
+    {
+        user: User | null,
+        register: (form: AuthInput) => Promise<void>,
+        login: (form: AuthInput) => Promise<void>,
+        logout: () => Promise<void>
+    } | undefined
+>(undefined);
+
+
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<User | null>(null)
+    // const {} = useAsync()
+    const login = (form: AuthInput) => _login(form).then((value) => setUser(value))
+    const register = (form: AuthInput) => _register(form).then(setUser)
+    const logout = () => _logout().then(() => setUser(null))
     return (
-        <div>authProvider</div>
+        <AuthContext.Provider
+            children={children}
+            value={{ user, register, login, logout }}
+        />
     )
 }
 
-export default authProvider
+export const useAuthContext = () => {
+    const context = useContext(AuthContext)
+
+    return context
+}

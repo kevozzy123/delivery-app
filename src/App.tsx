@@ -1,40 +1,26 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { LazyExoticComponent, Suspense, lazy } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Homepage from './screens/HomePage/Homepage'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const LoginPage = lazy(() => import('@/screens/Authpage/LoginPage'))
 
-  useEffect(() => {
-    fetch('https://elm.cangdu.org/v1/cities?type=hot', {
-      method: 'GET'
-    }).then(res => res.json())
-      .then(data => console.log(data))
-  }, [])
+function App() {
+  const SuspenceComponent =
+    (Component: LazyExoticComponent<React.FC<{}>>, props?: object) => {
+      return (
+        <Suspense fallback={null}>
+          <Component {...props} />
+        </Suspense>)
+    }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Homepage />} />
+        <Route path='/login' element={SuspenceComponent(LoginPage)} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
