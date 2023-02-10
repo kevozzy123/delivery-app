@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { TopBar } from '@/shared/components';
 import { color, font, sizes } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
+import Categories from './Categories';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 
 const Homepage = () => {
@@ -17,16 +18,25 @@ const Homepage = () => {
                 setList(data)
             })
 
+
+        fetch('https://elm.cangdu.org/shopping/v2/restaurant/category', {
+            method: 'GET'
+        }).then(res => res.json())
+            .then(data => {
+                // setCategories(data)
+                console.log(data)
+            })
+
         fetch('https://elm.cangdu.org/v2/index_entry', {
             method: 'GET'
         }).then(res => res.json())
             .then(data => {
                 setCategories(data)
-                console.log(data)
             })
     }, [])
     return (
         <PageWrapper>
+            <Categories categories={categories} />
             <ul>
                 {
                     list.map((item: any) => {
