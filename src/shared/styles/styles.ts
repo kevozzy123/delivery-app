@@ -30,7 +30,7 @@ export const sizes = {
   secondarySideBarWidth: 230,
   minViewportWidth: 1000,
   buttonBorderRadius: '3rem',
-  inputBorderRadius: '.5rem'
+  smallBorderRadius: '.5rem'
 };
 
 export const zIndexValues = {
@@ -93,6 +93,11 @@ export const mixin = {
   scrollableY: css`
     overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  `,
+  scrollableX: css`
+    overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
   `,
   customScrollbar: ({ width = 8, background = color.backgroundMedium } = {}) => css`

@@ -40,7 +40,6 @@ const SignupPage = () => {
     }
     return (
         <>
-            <TopBar center={<span>Sign In</span>} />
             <Form onSubmit={handleSubmit}>
                 <Input
                     id='email' label='Email'
@@ -59,6 +58,9 @@ const SignupPage = () => {
                 />
                 <Button variant='default' empty>Sign Up</Button>
                 {/* <ToggleButton></ToggleButton> */}
+                <p style={{ color: 'red', textAlign: 'initial' }}>For the purpose of demonstration,
+                    unregistered users will be automatically if they attempt to sign in.
+                    Therefore, you can directly sign in without a prior account and this sign in page is for presentation only.</p>
             </Form>
         </>
     )

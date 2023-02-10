@@ -14,7 +14,7 @@ export const StyledInput = styled.input`
     width: 100%;
     padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: ${sizes.inputBorderRadius};
+    border-radius: ${sizes.smallBorderRadius};
     margin: .5rem 0 1.5rem;
     ${font.size(18)};
 `

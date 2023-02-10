@@ -2,12 +2,19 @@ import React, { forwardRef, useState } from 'react'
 import styled from 'styled-components'
 import { color, font } from '@/shared/styles/styles'
 
-const ToggleBtn = forwardRef(({ labels }: { labels: string[] }, ref) => {
+interface Props {
+  labels: string[],
+  callback?: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+const ToggleBtn = forwardRef(({ labels, callback }: Props, ref) => {
   const [selected, setSelected] = useState('')
+
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked)
     setSelected(e.target.value)
+    callback!(e)
   }
+
   return (
     <ToggleWrapper>
       {labels.map((label: string, index: number) => {
@@ -18,7 +25,7 @@ const ToggleBtn = forwardRef(({ labels }: { labels: string[] }, ref) => {
               type='radio'
               value={label}
               name='toggle'
-              // checked={index === 1 && true}
+              defaultChecked={index === 0 && true}
               selected={label === selected}
               onChange={handleSelect}
             />

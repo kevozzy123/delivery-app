@@ -4,12 +4,17 @@ import LoginPage from './LoginPage'
 import SignupPage from './SignupPage'
 
 const AuthPage = () => {
-    const [isLogin, setIsLogin] = useState(true)
+    const [authState, setAuthState] = useState('')
     return (
         <div>
-            <TopBar center={<ToggleBtn labels={['Sign Up', 'Sign In']}></ToggleBtn>} />
+            <TopBar center={
+                <ToggleBtn
+                    labels={['Sign Up', 'Sign In']}
+                    callback={(e) => setAuthState(e.target.value)}
+                ></ToggleBtn>
+            } />
             {
-                isLogin ? <LoginPage /> : <SignupPage />
+                authState === 'Sign Up' ? <LoginPage /> : <SignupPage />
             }
         </div>
     )
