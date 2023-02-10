@@ -1,31 +1,75 @@
-import React, { forwardRef } from 'react'
-import { StyledInput } from './style'
+import React, { forwardRef, useState } from 'react'
+import { StyledInput, Label, InputGroup, ErrorMsg, IconWrapper } from './style'
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+interface VisibilityToggle {
+    visible: boolean,
+    onVisibleChange: () => void
+}
 
 interface Props {
     placeholder?: string,
     value?: any,
-    onChange: () => void,
-    disabled: boolean
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    disabled?: boolean,
+    className?: string,
+    label?: string,
+    type?: 'text' | 'number' | 'password' | 'email',
+    visibilityToggle?: VisibilityToggle,
+    id?: string,
+    errorMsg?: string,
+    showErr?: boolean,
 }
 
-const Input: React.FC<Props> = forwardRef(({
-    placeholder,
+const Input: React.FC<Props> = forwardRef<HTMLInputElement, Props>(({
+    placeholder = 'Enter here',
     value,
     onChange,
-    disabled
+    disabled = false,
+    className,
+    label,
+    type = 'text',
+    id,
+    visibilityToggle,
+    errorMsg,
+    showErr = false,
+    ...inputProps
 }, ref) => {
-    const handleChange = () => {
+    const [passwordVisible, setPasswordVisible] = useState(false)
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!disabled && onChange) {
-            onChange()
+            onChange(e)
         }
     }
     return (
-        <StyledInput
-            placeholder={placeholder}
-            value={value}
-            onChange={handleChange}
-            disabled={disabled}
-        ></StyledInput>
+        <InputGroup>
+            {label && <Label htmlFor={id}>{label}</Label>}
+            <StyledInput
+                ref={ref}
+                id={id}
+                placeholder={placeholder}
+                value={value}
+                onChange={handleChange}
+                disabled={disabled}
+                className={className}
+                type={type === 'password' ?
+                    (passwordVisible ? 'text' : 'password') : type}
+                {...inputProps}
+            ></StyledInput>
+            {
+                type === 'password' &&
+                (passwordVisible ?
+                    <IconWrapper onClick={() => setPasswordVisible(false)}>
+                        <VisibilityOffIcon />
+                    </IconWrapper> :
+                    <IconWrapper onClick={() => setPasswordVisible(true)}>
+                        <RemoveRedEyeIcon />
+                    </IconWrapper>)
+            }
+            {<ErrorMsg showErr={showErr}>{errorMsg}</ErrorMsg>}
+        </InputGroup>
     )
 })
 

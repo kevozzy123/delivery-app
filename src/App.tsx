@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Homepage from './screens/HomePage/Homepage'
 import './App.css'
 
-const LoginPage = lazy(() => import('@/screens/Authpage/LoginPage'))
+const LoginPage = lazy(() => import('@/screens/Authpage'))
 
 function App() {
   const SuspenceComponent =

@@ -1,7 +1,7 @@
 import { css } from 'styled-components';
 
 export const color: { [key: string]: string } = {
-  default: '#0052cc', // Blue
+  default: '#f5222d', // Blue
   success: '#0B875B', // green
   danger: '#E13C3C', // red
   warning: '#F89C1C', // orange

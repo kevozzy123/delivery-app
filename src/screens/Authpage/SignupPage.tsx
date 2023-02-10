@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react'
 import { Button, Input, TopBar } from '@/shared/components/index'
 import styled from 'styled-components'
 
-const LoginPage = () => {
+const SignupPage = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [usernameErr, setUsernameErr] = useState(false)
@@ -40,6 +40,7 @@ const LoginPage = () => {
     }
     return (
         <>
+            <TopBar center={<span>Sign In</span>} />
             <Form onSubmit={handleSubmit}>
                 <Input
                     id='email' label='Email'
@@ -56,7 +57,7 @@ const LoginPage = () => {
                     type="password"
                     placeholder="Enter your Password"
                 />
-                <Button variant='default' empty>Sign In</Button>
+                <Button variant='default' empty>Sign Up</Button>
                 {/* <ToggleButton></ToggleButton> */}
             </Form>
         </>
@@ -67,4 +68,4 @@ const Form = styled.form`
     padding: 1rem;
 `
 
-export default LoginPage
+export default SignupPage

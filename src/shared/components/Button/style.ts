@@ -35,7 +35,8 @@ interface ColoredProps {
 const colored = css<ColoredProps>`
   color: #fff;
   background: ${(props) => color[props.variant]};
-  font-weight: 500;
+  /* font-weight: 700; */
+  ${font.bold}
   &:not(:disabled) {
     &:hover {
       opacity: .8;

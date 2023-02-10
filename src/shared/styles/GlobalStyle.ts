@@ -22,6 +22,7 @@ export default createGlobalStyle`
     -webkit-tap-highlight-color: transparent;
     line-height: 1.2;
     ${font.size(16)}
+        padding: 60px 0 0;
   }
 
   #root {
