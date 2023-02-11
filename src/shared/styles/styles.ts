@@ -13,11 +13,18 @@ export const color: { [key: string]: string } = {
   textLight: '#8993a4',
   textLink: '#0052cc',
 
-  backgroundDarkPrimary: '#0747A6',
+  // backgroundDarkPrimary: '#0747A6',
+  // backgroundMedium: '#dfe1e6',
+  // backgroundLight: '#ebecf0',
+  // backgroundLightest: '#F4F5F7',
+  // backgroundLightPrimary: '#D2E5FE',
+  // backgroundLightSuccess: '#E4FCEF',
+
+  backgroundDarkPrimary: '#a8071a',
   backgroundMedium: '#dfe1e6',
   backgroundLight: '#ebecf0',
-  backgroundLightest: '#F4F5F7',
-  backgroundLightPrimary: '#D2E5FE',
+  backgroundLightest: '#fff2e8',
+  backgroundLightPrimary: '#ffe9e8',
   backgroundLightSuccess: '#E4FCEF',
 
   borderLightest: '#dfe1e6',
@@ -36,7 +43,7 @@ export const sizes = {
 export const zIndexValues = {
   modal: 1000,
   dropdown: 101,
-  navLeft: 100,
+  navTop: 100,
 };
 
 export const font = {

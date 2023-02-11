@@ -10,12 +10,16 @@ const Categories = ({ categories }: { categories: any }) => {
         <Wrapper>
             {categories.map((item: any) => {
                 return (
-                    <Item key={item.id}>
+                    <Item key={item.id}
+                        onClick={() => navigate('/categories/' + item.id)}
+                    >
                         <Img
                             src={'https://fuss10.elemecdn.com' + item.image_url}
                             alt="category thumbnail"
                         />
-                        <span style={{ whiteSpace: 'nowrap', marginTop: '.5rem' }}>{item.title}</span>
+                        <span style={{ whiteSpace: 'nowrap', marginTop: '.5rem' }}>
+                            {item.title}
+                        </span>
                     </Item>
                 )
             })}
@@ -23,12 +27,11 @@ const Categories = ({ categories }: { categories: any }) => {
     )
 }
 
-// src="https://fuss10.elemecdn.com/d/38/7bddb07503aea4b711236348e2632jpeg.jpeg"
-
 const Wrapper = styled.section`
     ${mixin.scrollableX}
     display: flex;
     align-items: center;
+    padding: 0 1rem;
 `
 
 const Img = styled.img`

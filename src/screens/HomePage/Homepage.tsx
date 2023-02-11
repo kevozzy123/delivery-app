@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { TopBar } from '@/shared/components';
-import { color, font, sizes } from '@/shared/styles/styles'
+import { color, font, sizes, zIndexValues } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
 import Categories from './Categories';
+import SubList from './SubList';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const Homepage = () => {
     const [list, setList] = useState([])
     const [categories, setCategories] = useState([])
+    const [restaurentList, setRestaurantList] = useState([])
 
     useEffect(() => {
         fetch('https://elm.cangdu.org/shopping/restaurants?latitude=31.22967&longitude=121.4762&limit=30', {
@@ -23,7 +26,7 @@ const Homepage = () => {
             method: 'GET'
         }).then(res => res.json())
             .then(data => {
-                // setCategories(data)
+                setRestaurantList(data)
                 console.log(data)
             })
 
@@ -36,8 +39,22 @@ const Homepage = () => {
     }, [])
     return (
         <PageWrapper>
+            <TopBar>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span>251 crabtree ct</span>
+                    <KeyboardArrowDownIcon />
+                </div>
+                <LocationOnIcon style={{ fontSize: '24px' }} />
+            </TopBar>
             <Categories categories={categories} />
-            <ul>
+            {restaurentList.map((restaurant: any) => {
+                return (
+                    <div key={restaurant.id}>
+                        <SubList list={restaurant} />
+                    </div>
+                )
+            })}
+            <List>
                 {
                     list.map((item: any) => {
                         return (
@@ -77,13 +94,34 @@ const Homepage = () => {
                         )
                     })
                 }
-            </ul>
+            </List>
         </PageWrapper>
     )
 }
 
 const PageWrapper = styled.main`
+
+`
+
+const TopBar = styled.div`
+    background-color: white;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    width: 100%;
+    top: 0;
+    z-index: ${zIndexValues.navTop};
     padding: 0 1rem;
+    ${font.size(22)};
+    ${font.bold};
+    background-color: white;
+    border-bottom: 1px solid ${color.backgroundLight};
+`
+
+const List = styled.ul`
+    margin: 1rem;
 `
 
 const ListItem = styled.li`
