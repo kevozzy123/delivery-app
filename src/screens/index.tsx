@@ -6,6 +6,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import HelpIcon from '@mui/icons-material/Help';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import GradeIcon from '@mui/icons-material/Grade';
 
 const index = () => {
     const navigate = useNavigate()
@@ -23,29 +25,23 @@ const index = () => {
         <IndexPage>
             <Outlet />
             <BottomNav>
-                <NavItem to='/' style={({ isActive }: any) =>
-                    isActive ? activeStyle : undefined
-                }>
+                <NavItem to='/'>
                     <HomeIcon />
                     Home
                 </NavItem>
-                <NavItem to='/' style={{ color: 'lightgray' }}>
-                    <HelpIcon />
-                    Unfinished
+                <NavItem to='/saved'>
+                    <GradeIcon />
+                    Saved
                 </NavItem>
-                <NavItem to='/' style={({ isActive }: any) =>
-                    isActive ? activeStyle : undefined
-                }>
+                <NavItem to='/search'>
                     <SearchIcon />
                     Search
                 </NavItem>
-                <NavItem to='/unfinished' style={{ color: 'lightgray' }}>
-                    <HelpIcon />
-                    Unfinished
+                <NavItem to='/cart'>
+                    <ShoppingCartIcon />
+                    Cart
                 </NavItem>
-                <NavItem to='/account' style={({ isActive }: { isActive: boolean }) =>
-                    isActive ? activeStyle : undefined
-                }>
+                <NavItem to='/account'>
                     <AccountCircleIcon />
                     Account
                 </NavItem>
@@ -78,9 +74,9 @@ const NavItem = styled(NavLink) <{ isActive?: boolean }>`
     flex-direction: column;
     align-items: center;
     ${font.size(16)};
-    `
-/* color: ${({ isActive }) => {
-    return isActive ? 'black' : color.textMedium
-}} */
+    &.active {
+        color: red;
+    }
+`
 
 export default index
