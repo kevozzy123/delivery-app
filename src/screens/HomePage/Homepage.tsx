@@ -13,6 +13,7 @@ const Homepage = () => {
     const [list, setList] = useState([])
     const [categories, setCategories] = useState([])
     const [restaurentList, setRestaurantList] = useState([])
+    const [showCities, setShowCities] = useState(false)
 
     useEffect(() => {
         fetch('https://elm.cangdu.org/shopping/restaurants?latitude=31.22967&longitude=121.4762&limit=30', {
@@ -44,7 +45,10 @@ const Homepage = () => {
                     <span>251 crabtree ct</span>
                     <KeyboardArrowDownIcon />
                 </div>
-                <LocationOnIcon style={{ fontSize: '24px' }} />
+                <LocationOnIcon
+                    style={{ fontSize: '24px', cursor: 'pointer' }}
+                    onClick={() => setShowCities(true)}
+                />
             </TopBar>
             <Categories categories={categories} />
             {restaurentList.map((restaurant: any) => {
@@ -96,7 +100,7 @@ const Homepage = () => {
                     })
                 }
             </List>
-            <CityList />
+            <CityList showCities={showCities} closeShowCities={() => setShowCities(false)} />
         </PageWrapper>
     )
 }
