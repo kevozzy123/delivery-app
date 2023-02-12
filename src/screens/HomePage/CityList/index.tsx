@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { zIndexValues, color, sizes, font } from '@/shared/styles/styles'
 import CloseIcon from '@mui/icons-material/Close';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 interface Props {
     showCities: boolean,
@@ -11,7 +12,8 @@ const CityList: React.FC<Props> = ({ showCities = false, closeShowCities }) => {
     const [cities, setCities] = useState<{ [key: string]: any }>({})
     const [hotcities, setHotCities] = useState([])
     const [input, setInput] = useState('')
-    const [filtered, setFiltered] = useState([])
+    const [cityOnlyList, setCityOnlyList] = useState<any[]>([])
+    const [filtered, setFiltered] = useState<any[]>([])
 
     useEffect(() => {
         fetch('https://elm.cangdu.org/v1/cities?type=group', {
@@ -20,10 +22,10 @@ const CityList: React.FC<Props> = ({ showCities = false, closeShowCities }) => {
             .then(data => {
                 console.log(data)
                 setCities(data)
-            }).then(() => {
-                let c = Object.keys(cities).map((key: string) => {
-                    return (cities[key])
-                })
+                let flattened = Object.keys(data).map((key: string) => {
+                    return data[key]
+                }).flat(2)
+                setCityOnlyList(flattened)
             })
 
         fetch('https://elm.cangdu.org/v1/cities?type=hot', {
@@ -35,13 +37,12 @@ const CityList: React.FC<Props> = ({ showCities = false, closeShowCities }) => {
     }, [])
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInput(e.target.value)
-        console.log(cities)
-        // let arr = cities.filter((city: string) => {
-        //     return city.includes(e.target.value)
-        // })
-        // setFiltered(arr)
-        // console.log(arr)
+        let value = e.target.value
+        setInput(value)
+        let arr = cityOnlyList.filter((city: any) => {
+            return city.name.includes(value) || city.pinyin.includes(value)
+        })
+        setFiltered(arr)
     }
 
     const Anchors = Object.keys(cities).sort().map((key: string) => {
@@ -73,26 +74,41 @@ const CityList: React.FC<Props> = ({ showCities = false, closeShowCities }) => {
                     placeholder='search a city'
                 />
             </SearchBar>
-            <Key>Recent Searches:</Key>
-            <HotCityWrapper>
-                {hotcities.map((item: any) => {
-                    return (
-                        <CityBox key={item.id}>{item.name}</CityBox>
-                    )
-                })}
-            </HotCityWrapper>
-            <AnchorWrapper>
-                {Anchors}
-            </AnchorWrapper>
-            <Key>Hot Cities:</Key>
-            <HotCityWrapper>
-                {hotcities.map((item: any) => {
-                    return (
-                        <CityBox key={item.id}>{item.name}</CityBox>
-                    )
-                })}
-            </HotCityWrapper>
-            {Cities}
+            {
+                input ?
+                    <div>
+                        {filtered.map((item: any) => {
+                            return (
+                                <ResultItem>
+                                    <LocationOnIcon style={{ marginRight: '1rem' }} />
+                                    <span>{item.name}</span>
+                                </ResultItem>
+                            )
+                        })}
+                    </div>
+                    :
+                    <>
+                        <Key>Recent Searches:</Key>
+                        <HotCityWrapper>
+                            {hotcities.map((item: any) => {
+                                return (
+                                    <CityBox key={item.id}>{item.name}</CityBox>
+                                )
+                            })}
+                        </HotCityWrapper>
+                        <AnchorWrapper>
+                            {Anchors}
+                        </AnchorWrapper>
+                        <Key>Hot Cities:</Key>
+                        <HotCityWrapper>
+                            {hotcities.map((item: any) => {
+                                return (
+                                    <CityBox key={item.id}>{item.name}</CityBox>
+                                )
+                            })}
+                        </HotCityWrapper>
+                        {Cities}
+                    </>}
         </CityWrapper>
     )
 }
@@ -109,7 +125,8 @@ const CityWrapper = styled.section<{
     bottom: ${props => props.showCities ? '0%' : '-100%'};
     z-index: ${zIndexValues.modal};
     padding: 0 2rem 0 1rem;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: .2s ease;
 `
 
@@ -178,6 +195,21 @@ const CityBox = styled.div`
     border-radius: ${sizes.smallBorderRadius};
     &:hover {
         background-color: ${color.backgroundLight};
+    }
+`
+
+const ResultItem = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    position: relative;
+    &::before {
+        content: '';
+        height: 1px;
+        width: 100%;
+        background-color: ${color.borderLightest};
+        position: absolute;
+        bottom: 0;
     }
 `
 
