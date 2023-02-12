@@ -1,5 +1,5 @@
 import React from 'react'
-import { mixin, font } from '@/shared/styles/styles'
+import { mixin, font, color } from '@/shared/styles/styles'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
@@ -31,7 +31,21 @@ const Wrapper = styled.section`
     ${mixin.scrollableX}
     display: flex;
     align-items: center;
-    padding: 0 1rem;
+    padding: 1rem 1rem 2rem;
+    position: relative;
+     &::before {
+        height: 8px;
+        width: 100%;
+        content: '';
+        background-color: ${color.backgroundLight};
+        border-top: 1px solid ${color.backgroundMedium};
+        border-bottom: 1px solid ${color.backgroundMedium};
+        position: absolute;
+        display: block;
+        bottom: 0rem;
+        left: 0;
+        right: 0;
+    }
 `
 
 const Img = styled.img`

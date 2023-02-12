@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { color, font, sizes, zIndexValues } from '@/shared/styles/styles'
+import { color, font, sizes, zIndexValues, mixin } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
 import Categories from './Categories';
 import SubList from './SubList';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import CityList from './CityList';
 
 const Homepage = () => {
     const [list, setList] = useState([])
@@ -27,7 +28,6 @@ const Homepage = () => {
         }).then(res => res.json())
             .then(data => {
                 setRestaurantList(data)
-                console.log(data)
             })
 
         fetch('https://elm.cangdu.org/v2/index_entry', {
@@ -55,6 +55,7 @@ const Homepage = () => {
                 )
             })}
             <List>
+                <TitleLarge>More Options</TitleLarge>
                 {
                     list.map((item: any) => {
                         return (
@@ -95,6 +96,7 @@ const Homepage = () => {
                     })
                 }
             </List>
+            <CityList />
         </PageWrapper>
     )
 }
@@ -125,12 +127,16 @@ const List = styled.ul`
 `
 
 const ListItem = styled.li`
-    margin: 1.5rem 0;
+    margin: 2rem 0;
+    position: relative;
     &::before{
         content: '';
-        width: 100%;
-        height: 2px;
-        color: black;
+        width: calc(100% + 2rem);
+        height: 1px;
+        background-color: ${color.borderLight};
+        position: absolute;
+        bottom: -1rem;
+        left: -1rem;
     }
 `
 
@@ -143,6 +149,13 @@ const Title = styled.h4`
     display: flex;
     align-items: center;
     margin: .5rem 0;
+    ${mixin.truncateText}
+`
+
+const TitleLarge = styled.h3`
+    ${font.size(24)}
+    ${font.bold}
+    margin-bottom: -1rem;
 `
 
 const InfoItem = styled.div<{ justifyContent?: boolean }>`

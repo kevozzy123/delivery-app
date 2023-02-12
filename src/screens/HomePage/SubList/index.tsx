@@ -63,8 +63,6 @@ const SubList: React.FC<{ list: any }> = ({ list }) => {
                         )
                     })
                 }
-
-
             </ListWrapper>
         </Container>
     )
