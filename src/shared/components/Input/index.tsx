@@ -2,11 +2,17 @@ import React, { forwardRef, useState } from 'react'
 import { StyledInput, Label, InputGroup, ErrorMsg, IconWrapper } from './style'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import useDebounce from '@/shared/util/useDebounce';
 
 interface VisibilityToggle {
     visible: boolean,
     onVisibleChange: () => void
 }
+
+// interface Debounce {
+//     delay?: number,
+//     value?: string | number
+// }
 
 interface Props {
     placeholder?: string,
@@ -20,6 +26,7 @@ interface Props {
     id?: string,
     errorMsg?: string,
     showErr?: boolean,
+    // debounce?: Debounce
 }
 
 const Input: React.FC<Props> = forwardRef<HTMLInputElement, Props>(({
@@ -34,6 +41,10 @@ const Input: React.FC<Props> = forwardRef<HTMLInputElement, Props>(({
     visibilityToggle,
     errorMsg,
     showErr = false,
+    // debounce = {
+    //     delay: 0,
+    //     value: ''
+    // },
     ...inputProps
 }, ref) => {
     const [passwordVisible, setPasswordVisible] = useState(false)

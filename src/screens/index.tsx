@@ -63,7 +63,7 @@ const BottomNav = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: 1rem;
+    padding: .5rem;
     background-color: white;
     border-top: 1px solid ${color.borderLight};
     z-index: ${zIndexValues.navTop};
