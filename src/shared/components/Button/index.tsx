@@ -1,6 +1,8 @@
 import React, { ReactNode, forwardRef, RefObject } from 'react'
 import { StyledButton, StyledSpinner } from './style'
 import Spinner from '../Spinner'
+import styled from 'styled-components'
+import { font } from '@/shared/styles/styles'
 
 interface BProps {
   children?: ReactNode,
@@ -44,4 +46,13 @@ const Button: React.FC<BProps> = forwardRef<HTMLButtonElement, BProps>(({
   )
 })
 
+export const RoundButton = styled.button`
+      height: 30px;
+    width: 30px;
+    position: absolute;
+    left: 1rem;
+    background-color: white;
+    border-radius: 50%;
+    ${font.bold};
+`
 export default Button

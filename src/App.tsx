@@ -10,7 +10,7 @@ function App() {
   const SuspenceComponent =
     (Component: LazyExoticComponent<React.FC<{}>>, props?: object) => {
       return (
-        <Suspense fallback={null}>
+        <Suspense fallback={<div>loading...</div>}>
           <Component {...props} />
         </Suspense>)
     }
@@ -20,7 +20,7 @@ function App() {
       <Routes>
         <Route path='/' element={<IndexPage />}>
           <Route index element={<Homepage />} />
-          <Route path='/catories/:id' element={<Homepage />} />
+          <Route path='/categories/:id' element={<Homepage />} />
           <Route path='restaurant/:id' element={<RestaurantPage />} />
           <Route path='/*' element={SuspenceComponent(NotCompletePage)} />
         </Route>

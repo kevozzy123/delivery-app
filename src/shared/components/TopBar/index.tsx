@@ -3,23 +3,21 @@ import styled from 'styled-components'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { font, color } from '@/shared/styles/styles'
 import { useNavigate } from 'react-router-dom'
-
-interface NamedSlots {
-
-}
+import { RoundButton } from '../Button';
 
 interface Props {
     center?: ReactNode,
-    right?: ReactNode
+    right?: ReactNode,
+    transparent?: boolean
 }
 
 const TopBar: React.FC<Props> = ({ center, right }, ref) => {
     const navigate = useNavigate()
     return (
         <BarWrapper>
-            <BackBtn onClick={() => navigate(-1)}>
+            <RoundButton onClick={() => navigate(-1)}>
                 <ArrowIcon />
-            </BackBtn>
+            </RoundButton>
             <Center>{center}</Center>
             <Right>{right}</Right>
         </BarWrapper>
@@ -37,18 +35,9 @@ const BarWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
     padding: 0 1rem;
     border-bottom: 1px solid ${color.backgroundLightPrimary};
-`
-
-const BackBtn = styled.button`
-    height: 30px;
-    width: 30px;
-    position: absolute;
-    left: 1rem;
-    background-color: white;
-    border-radius: 50%;
-    ${font.bold};
 `
 
 const ArrowIcon = styled(ArrowBackIcon)`

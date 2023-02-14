@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 import { color, font, sizes, zIndexValues, mixin } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
 import Categories from './Categories';
@@ -10,6 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CityList from './CityList';
 
 const Homepage = () => {
+    const navigate = useNavigate()
     const [list, setList] = useState([])
     const [categories, setCategories] = useState([])
     const [restaurentList, setRestaurantList] = useState([])
@@ -38,6 +40,7 @@ const Homepage = () => {
                 setCategories(data)
             })
     }, [])
+
     return (
         <PageWrapper>
             <TopBar>
@@ -64,7 +67,13 @@ const Homepage = () => {
                     list.map((item: any) => {
                         return (
                             <ListItem key={item.id}>
-                                <Img src={'//elm.cangdu.org/img/' + item.image_path} alt="thumbnail" />
+                                <Img
+                                    onClick={() => {
+                                        console.log(111)
+                                        navigate('/restaurant/' + item.id)
+                                    }}
+                                    src={'//elm.cangdu.org/img/' + item.image_path}
+                                    alt="thumbnail" />
                                 <InfoWrapper>
                                     <Title>
                                         <LocalDiningIcon />{item.name}

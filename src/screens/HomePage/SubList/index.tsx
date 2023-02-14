@@ -3,51 +3,9 @@ import styled from 'styled-components'
 import { font, mixin, color, sizes } from '@/shared/styles/styles'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Skeleton } from '@mui/material';
+import { getImgPath } from '@/shared/util/image';
 
 const SubList: React.FC<{ list: any }> = ({ list }) => {
-
-    const getImgPath = (path: string) => {
-        function substr(string: string, start: number, length?: number) {
-            let finalString = "";
-
-            // Check if start value is negative
-            if (start < 0) {
-                start = string.length + start;
-            }
-
-            // Check if length value is not provided
-            if (length === undefined) {
-                length = string.length;
-            }
-
-            // Check if length value is negative
-            if (length < 0) {
-                length = string.length + length - start;
-            }
-
-            // Extract the desired substring
-            for (let i = start; i < start + length; i++) {
-                if (string[i] === undefined) {
-                    break;
-                }
-
-                finalString += string[i];
-            }
-
-            return finalString;
-        }
-        let suffix;
-        if (!path) {
-            return '//elm.cangdu.org/img/default.jpg'
-        }
-        if (path.indexOf('jpeg') !== -1) {
-            suffix = '.jpeg'
-        } else {
-            suffix = '.png'
-        }
-        let url = '/' + substr(path, 0, 1) + '/' + substr(path, 1, 2) + '/' + substr(path, 3) + suffix;
-        return 'https://fuss10.elemecdn.com' + url
-    }
     return (
         <Container isEmpty={list.sub_categories.length === 0}>
             <Title>{list.name}</Title>
