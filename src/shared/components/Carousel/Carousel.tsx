@@ -8,7 +8,7 @@ const Carousel = () => {
 }
 
 const CarouselWrapper = styled.div`
-        
+    
 `
 
 export default Carousel

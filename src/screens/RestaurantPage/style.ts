@@ -119,9 +119,19 @@ export const MenuSection = styled.div`
 export const MenuItem = styled.div`
     display: flex;
     justify-content: space-between;
+    padding: 2rem 0;
+    border-bottom: 1px solid ${color.borderLight};
+    & div {
+        display: flex;
+        flex-direction: column;
+    }
     & img {
-        width: 100px;
+        width: 120px;
         height: 120px;
         object-fit: cover;
+        border-radius: ${sizes.smallBorderRadius};
+    }
+    & h4{
+        ${font.size(20)}
     }
 `

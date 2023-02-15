@@ -1,9 +1,9 @@
-import * as auth from '@/shared/context/authProvider';
+import * as auth from '@/shared/context/authContext';
 import { useAuthContext } from '../context/authContext';
 import { useCallback } from 'react';
 import qs from 'qs'
 
-const apiUrl = 'https://elm.cangdu.org/v1/cities'
+const apiUrl = 'https://elm.cangdu.org/'
 
 interface Config extends RequestInit {
     token?: string,
@@ -12,12 +12,13 @@ interface Config extends RequestInit {
 
 export const http = async (
     endpoint: string,
+    version: string = '',
     { data, token, headers, ...customConfig }: Config = {}
 ) => {
     const config = {
         method: "GET",
         headers: {
-            Authorization: token ? `Bearer ${token}` : "",
+            "Authorization": token ? `Bearer ${token}` : "",
             "Content-Type": data ? "application/json" : "",
         },
         ...customConfig,
@@ -31,10 +32,10 @@ export const http = async (
 
     // axios 和 fetch 的表现不一样，axios可以直接在返回状态不为2xx的时候抛出异常
     return window
-        .fetch(`${apiUrl}/${endpoint}`, config)
+        .fetch(`${apiUrl}${version}/${endpoint}`, config)
         .then(async (response) => {
             if (response.status === 401) {
-                await auth.logout();
+                await auth._logout();
                 window.location.reload();
                 return Promise.reject({ message: "请重新登录" });
             }
@@ -48,5 +49,9 @@ export const http = async (
 };
 
 export const useHttp = () => {
-    const { user } = useAuthContext()
+    const context = useAuthContext()
+
+    return useCallback((...[endpoint, version, config]: Parameters<typeof http>) => {
+        http(endpoint, version, { ...config, token: context?.user?.token })
+    }, [context?.user?.token])
 }

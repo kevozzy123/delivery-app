@@ -19,9 +19,7 @@ import {
     Avatar
 } from './style'
 import { pickRandom, splitStr } from '@/shared/util/javascript';
-
 import TopBar from './TopOptions'
-
 
 const RestaurantPage = () => {
     const { id } = useParams()
@@ -117,10 +115,10 @@ const RestaurantPage = () => {
                                     return (
                                         <MenuItem>
                                             <div>
-                                                <h4> {item.name}</h4>
-                                                <p>{item.tips}</p>
+                                                <h4>{item.name}</h4>
+                                                <p>descipriton: {item.description}</p>
+                                                <p style={{ marginTop: 'auto' }}>{item.tips}</p>
                                             </div>
-
                                             <img src={'//elm.cangdu.org/img/' + item.image_path} alt="" />
                                         </MenuItem>
                                     )
