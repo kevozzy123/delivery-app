@@ -14,12 +14,16 @@ export function useDebounce<T>(value: T, delay?: number): T {
     return debouncedValue
 }
 
-export function useThrottle<T>(value: T, interval: number = 500) {
-    const [throttleValue, setThrottleValue] = useState<T>(value)
+export function useThrottle<T>(callback: () => void, interval: number = 500) {
+    const [flag, setFlag] = useState(true)
 
     useEffect(() => {
-
-    }, [value, interval])
+        setTimeout(() => {
+            callback()
+            setFlag(true)
+        }, interval);
+        setFlag(false)
+    }, [interval])
 }
 
 export const useIsMounted = () => {

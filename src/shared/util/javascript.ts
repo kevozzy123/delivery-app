@@ -55,6 +55,5 @@ export const cleanObject = (object: { [key: string]: unknown }) => {
             delete result[key]
         }
     })
-
     return result
 }

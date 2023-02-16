@@ -2,17 +2,11 @@ import React, { forwardRef, useState } from 'react'
 import { StyledInput, Label, InputGroup, ErrorMsg, IconWrapper } from './style'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import useDebounce from '@/shared/util/userExprience';
 
 interface VisibilityToggle {
     visible: boolean,
     onVisibleChange: () => void
 }
-
-// interface Debounce {
-//     delay?: number,
-//     value?: string | number
-// }
 
 interface Props {
     placeholder?: string,
