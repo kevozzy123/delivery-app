@@ -47,3 +47,14 @@ export function pickRandom(min: number, max: number) {
 export function splitStr(string: string, separator: string) {
     return string.split(separator)
 }
+
+export const cleanObject = (object: { [key: string]: unknown }) => {
+    let result = { ...object }
+    Object.keys(result).forEach((key) => {
+        if (!result[key]) {
+            delete result[key]
+        }
+    })
+
+    return result
+}

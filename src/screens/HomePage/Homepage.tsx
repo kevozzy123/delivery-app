@@ -68,10 +68,7 @@ const Homepage = () => {
                         return (
                             <ListItem key={item.id}>
                                 <Img
-                                    onClick={() => {
-                                        console.log(111)
-                                        navigate('/restaurant/' + item.id)
-                                    }}
+                                    onClick={() => { navigate('/restaurant/' + item.id) }}
                                     src={'//elm.cangdu.org/img/' + item.image_path}
                                     alt="thumbnail" />
                                 <InfoWrapper>

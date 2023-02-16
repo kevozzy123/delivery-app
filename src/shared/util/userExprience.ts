@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-function useDebounce<T>(value: T, delay?: number): T {
+export function useDebounce<T>(value: T, delay?: number): T {
     const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
     useEffect(() => {
@@ -14,4 +14,21 @@ function useDebounce<T>(value: T, delay?: number): T {
     return debouncedValue
 }
 
-export default useDebounce
+export function useThrottle<T>(value: T, interval: number = 500) {
+    const [throttleValue, setThrottleValue] = useState<T>(value)
+
+    useEffect(() => {
+
+    }, [value, interval])
+}
+
+export const useIsMounted = () => {
+    const mountedRef = useRef(false)
+    useEffect(() => {
+        mountedRef.current = true
+        return () => {
+            mountedRef.current = false
+        }
+    })
+    return mountedRef
+}
