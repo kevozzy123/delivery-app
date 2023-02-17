@@ -13,7 +13,7 @@ import CityList from './CityList';
 
 const Homepage = () => {
     const navigate = useNavigate()
-    const { callApi, isLoading } = useApi()
+    const { callApi, isLoading, data } = useApi()
     const [list, setList] = useState([])
     const [categories, setCategories] = useState([])
     const [restaurentList, setRestaurantList] = useState([])
@@ -25,12 +25,12 @@ const Homepage = () => {
                 method: 'GET'
             }).then(res => res.json())
         )
-        fetch('https://elm.cangdu.org/shopping/restaurants?latitude=31.22967&longitude=121.4762&limit=30', {
-            method: 'GET'
-        }).then(res => res.json())
-            .then(data => {
-                setList(data)
-            })
+        // fetch('https://elm.cangdu.org/shopping/restaurants?latitude=31.22967&longitude=121.4762&limit=30', {
+        //     method: 'GET'
+        // }).then(res => res.json())
+        //     .then(data => {
+        //         setList(data)
+        //     })
 
 
         fetch('https://elm.cangdu.org/shopping/v2/restaurant/category', {
