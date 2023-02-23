@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useApi } from '@/shared/util/useApi';
 import { useNavigate } from 'react-router-dom';
 import { color, font, sizes, zIndexValues, mixin } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
@@ -13,18 +12,13 @@ import CityList from './CityList';
 
 const Homepage = () => {
     const navigate = useNavigate()
-    const { callApi, isLoading, data } = useApi()
+    // const { callApi, isLoading, data } = useApi()
     const [list, setList] = useState([])
     const [categories, setCategories] = useState([])
     const [restaurentList, setRestaurantList] = useState([])
     const [showCities, setShowCities] = useState(false)
 
     useEffect(() => {
-        callApi(
-            fetch('https://elm.cangdu.org/shopping/restaurants?latitude=31.22967&longitude=121.4762&limit=30', {
-                method: 'GET'
-            }).then(res => res.json())
-        )
         // fetch('https://elm.cangdu.org/shopping/restaurants?latitude=31.22967&longitude=121.4762&limit=30', {
         //     method: 'GET'
         // }).then(res => res.json())

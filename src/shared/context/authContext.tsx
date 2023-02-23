@@ -1,6 +1,5 @@
 import React, { ReactNode, useCallback, useContext, useState } from "react";
 import { User } from '../types/index'
-import { notification } from 'antd';
 
 interface AuthInput {
     username: string,
@@ -10,7 +9,7 @@ interface AuthInput {
 const apiUrl = process.env.NODE_ENV === 'development'
     ? 'http://localhost:4000' : process.env.REACT_APP_API_URL
 
-const getToken = () => {
+export const getToken = () => {
     return localStorage.getItem('user') ?
         JSON.parse(localStorage.getItem('user') as string).token : undefined
 }
@@ -55,9 +54,9 @@ export const _register = (data: AuthInput) => {
 
 export const _logout = async () => {
     localStorage.removeItem('user')
-    notification.open({
-        message: 'You have been logged out'
-    });
+    // notification.open({
+    //     message: 'You have been logged out'
+    // });
 }
 
 const assignToken = async () => {

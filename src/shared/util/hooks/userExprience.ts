@@ -19,6 +19,7 @@ export function useThrottle<T>(callback: () => void, interval: number = 500) {
 
     useEffect(() => {
         setTimeout(() => {
+            if (!flag) return
             callback()
             setFlag(true)
         }, interval);
