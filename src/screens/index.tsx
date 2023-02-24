@@ -75,7 +75,7 @@ const NavItem = styled(NavLink) <{ isActive?: boolean }>`
     align-items: center;
     ${font.size(16)};
     &.active {
-        color: red;
+        color: ${color.backgroundMedium};
     }
 `
 

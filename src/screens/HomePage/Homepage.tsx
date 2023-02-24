@@ -12,7 +12,6 @@ import CityList from './CityList';
 
 const Homepage = () => {
     const navigate = useNavigate()
-    // const { callApi, isLoading, data } = useApi()
     const [list, setList] = useState([])
     const [categories, setCategories] = useState([])
     const [restaurentList, setRestaurantList] = useState([])
@@ -41,6 +40,7 @@ const Homepage = () => {
                 setCategories(data)
             })
     }, [])
+
 
     return (
         <PageWrapper>

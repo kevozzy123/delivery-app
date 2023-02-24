@@ -13,8 +13,8 @@ export const color: { [key: string]: string } = {
   textLight: '#8993a4',
   textLink: '#0052cc',
 
-  backgroundDarkPrimary: '#0747A6',
-  backgroundMedium: '#dfe1e6',
+  backgroundDarkPrimary: '#610b00',
+  backgroundMedium: '#fa541c',
   backgroundLight: '#ebecf0',
   backgroundLightest: '#F4F5F7',
   backgroundLightPrimary: '#D2E5FE',

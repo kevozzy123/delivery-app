@@ -1,57 +1,47 @@
-import * as auth from '@/shared/context/authContext';
-import { useAuthContext } from '../context/authContext';
-import { useCallback } from 'react';
-import qs from 'qs'
+import axios, { AxiosError } from "axios";
+import history from "@/browserHistory"
+import { getToken } from "../context/authContext";
 
-const apiUrl = 'https://elm.cangdu.org/'
-
-interface Config extends RequestInit {
-    token?: string,
-    data?: object
+const defaults = {
+    baseUrl: 'https://elm.cangdu.org',
+    headers: {
+        'Content-Type': 'application/json',
+        "Authorization": getToken() ? 'Bearer ' + getToken() : undefined
+    },
+    error: {
+        code: 'BAD_CONNECTION',
+        message: 'Oops! It seems your connection is unstable. Please try again.'
+    }
 }
 
-export const http = async (
-    endpoint: string,
-    version: string = '',
-    { data, token, headers, ...customConfig }: Config = {}
-) => {
-    const config = {
-        method: "GET",
-        headers: {
-            "Authorization": token ? `Bearer ${token}` : "",
-            "Content-Type": data ? "application/json" : "",
-        },
-        ...customConfig,
-    };
+const api = <V>(method: string, url: string, variables: V) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method,
+            url: `${defaults.baseUrl}${url}`,
+            data: method.toLowerCase() !== 'get' ? variables : undefined,
+            params: method.toLowerCase() === 'get' ? variables : undefined,
+            // paramsSerializer: 
+        })
+            .then((res) => resolve(res))
+            .catch((error: AxiosError<any>) => {
+                if (error.response) {
+                    if (error.response.data.error.code === 'invalidToken') {
+                        history.push('/login')
+                    } else {
+                        reject(error.response.data.error)
+                    }
+                } else {
+                    reject(defaults.error)
+                }
+            })
+    })
+}
 
-    if (config.method.toUpperCase() === "GET") {
-        endpoint += `?${qs.stringify(data)}`;
-    } else {
-        config.body = JSON.stringify(data || {});
-    }
-
-    // axios 和 fetch 的表现不一样，axios可以直接在返回状态不为2xx的时候抛出异常
-    return window
-        .fetch(`${apiUrl}${version}/${endpoint}`, config)
-        .then(async (response) => {
-            if (response.status === 401) {
-                await auth._logout();
-                window.location.reload();
-                return Promise.reject({ message: "请重新登录" });
-            }
-            const data = await response.json();
-            if (response.ok) {
-                return data;
-            } else {
-                return Promise.reject(data);
-            }
-        });
-};
-
-export const useHttp = () => {
-    const context = useAuthContext()
-
-    return useCallback((...[endpoint, version, config]: Parameters<typeof http>) => {
-        http(endpoint, version, { ...config, token: context?.user?.token })
-    }, [context?.user?.token])
+export default {
+    get: <V>(url: string, variables: V) => api('get', url, variables),
+    post: <V>(url: string, variables: V) => api('post', url, variables),
+    put: <V>(url: string, variables: V) => api('put', url, variables),
+    delete: <V>(url: string, variables: V) => api('delete', url, variables),
+    patch: <V>(url: string, variables: V) => api('patch', url, variables),
 }

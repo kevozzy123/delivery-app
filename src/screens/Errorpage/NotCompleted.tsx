@@ -1,6 +1,8 @@
 import styled from 'styled-components'
+import { useEffect } from 'react';
 
 const NotCompleted = () => {
+
     return (
         <Page>
             <h3>This featured isn't open</h3>
