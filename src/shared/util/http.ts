@@ -23,7 +23,7 @@ const api = <V>(method: string, url: string, variables: V) => {
             params: method.toLowerCase() === 'get' ? variables : undefined,
             // paramsSerializer: 
         })
-            .then((res) => resolve(res))
+            .then((res) => resolve(res.data))
             .catch((error: AxiosError<any>) => {
                 if (error.response) {
                     if (error.response.data.error.code === 'invalidToken') {
@@ -38,10 +38,12 @@ const api = <V>(method: string, url: string, variables: V) => {
     })
 }
 
-export default {
+const methods = {
     get: <V>(url: string, variables: V) => api('get', url, variables),
     post: <V>(url: string, variables: V) => api('post', url, variables),
     put: <V>(url: string, variables: V) => api('put', url, variables),
     delete: <V>(url: string, variables: V) => api('delete', url, variables),
     patch: <V>(url: string, variables: V) => api('patch', url, variables),
 }
+
+export default methods

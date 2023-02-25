@@ -2,6 +2,7 @@ import useMergeState from "./useMergeState";
 import api from "../http";
 import { IApiState, IPropOptions } from "@/shared/types";
 import { useCallback } from "react";
+import { send } from "vite";
 
 type method = 'get' | 'post' | 'put' | 'delete' | 'patch'
 
@@ -22,7 +23,20 @@ const useMutation = (method: method, url: string) => {
                         resolve(data)
                         mergeState({ data, error: null, isLoading: false })
                     })
-                    .catch((error))
+                    .catch((error: Error) => {
+                        reject(error)
+                        mergeState({ data: null, error, isLoading: false })
+                    })
             })
-        }, [])
+        }, [method, url, mergeState])
+
+    return [
+        {
+            ...state,
+            isLoading: state.isLoading
+        },
+        sendRequest
+    ]
 }
+
+export default useMutation

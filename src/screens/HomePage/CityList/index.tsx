@@ -6,6 +6,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useSelector, useDispatch } from 'react-redux'
 import { RootStore } from '@/shared/store';
 import { setLocation, clearSearchHistory, Location } from '@/shared/store/locationSlice'
+import useHttp from '@/shared/util/hooks/useApi';
+import { group } from 'console';
 
 interface Props {
     showCities: boolean,
@@ -13,34 +15,58 @@ interface Props {
 }
 const CityList: React.FC<Props> =
     ({ showCities = false, closeShowCities }) => {
-        const [cities, setCities] = useState<{ [key: string]: any }>({})
-        const [hotcities, setHotCities] = useState([])
+        // const [cities, setCities] = useState<{ [key: string]: any }>({})
+        // const [hotcities, setHotCities] = useState([])
         const [input, setInput] = useState('')
         const [cityOnlyList, setCityOnlyList] = useState<any[]>([])
         const [filtered, setFiltered] = useState<any[]>([])
         const recentSearches = useSelector<RootStore, Location[]>(state => state.location.recentSearches)
         const dispatch = useDispatch()
+        const [{
+            data: cities,
+            isLoading: isCitiesLoading
+        }] = useHttp.get('/v1/cities', {
+            type: "group"
+        })
+        const [{
+            data: hotcities,
+            isLoading: isHotCitiesLoading
+        }] = useHttp.get('/v1/cities', {
+            type: 'hot'
+        })
 
         useEffect(() => {
-            fetch('https://elm.cangdu.org/v1/cities?type=group', {
-                method: 'GET'
-            }).then(res => res.json())
-                .then(data => {
-                    console.log(data)
-                    setCities(data)
-                    let flattened = Object.keys(data).map((key: string) => {
-                        return data[key]
-                    }).flat(2)
-                    setCityOnlyList(flattened)
-                })
+            if (cities) {
+                let flattened = Object.keys(cities).map((key: string) => {
+                    return cities[key]
+                }).flat(2)
+                setCityOnlyList(flattened)
+            }
 
-            fetch('https://elm.cangdu.org/v1/cities?type=hot', {
-                method: 'GET'
-            }).then(res => res.json())
-                .then(data => {
-                    setHotCities(data)
-                })
-        }, [])
+            console.log(cities)
+            console.log(hotcities)
+        }, [cities, hotcities])
+
+        // useEffect(() => {
+        //     fetch('https://elm.cangdu.org/v1/cities?type=group', {
+        //         method: 'GET'
+        //     }).then(res => res.json())
+        //         .then(data => {
+        //             console.log(data)
+        //             setCities(data)
+        //             let flattened = Object.keys(data).map((key: string) => {
+        //                 return data[key]
+        //             }).flat(2)
+        //             setCityOnlyList(flattened)
+        //         })
+
+        //     fetch('https://elm.cangdu.org/v1/cities?type=hot', {
+        //         method: 'GET'
+        //     }).then(res => res.json())
+        //         .then(data => {
+        //             setHotCities(data)
+        //         })
+        // }, [])
 
         const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             let value = e.target.value
@@ -55,24 +81,30 @@ const CityList: React.FC<Props> =
             dispatch(setLocation(item))
         }
 
-        const Anchors = Object.keys(cities).sort().map((key: string) => {
-            return (
-                <a href={`#${key}`} key={key}>{key}</a>
-            )
-        })
+        const Anchors = () => {
+            if (!cities) return <></>
+            return Object.keys(cities).sort().map((key: string) => {
+                return (
+                    <a href={`#${key}`} key={key}>{key}</a>
+                )
+            })
+        }
 
-        const Cities = Object.keys(cities).sort().map((key: string) => {
-            return (
-                <NormalCityWrapper key={key}>
-                    <Key id={key}>{key}</Key>
-                    <div>
-                        {cities[key].map((item: any) => {
-                            return <City key={item.id} onClick={() => onCityClick(item)}>{item.name}</City>
-                        })}
-                    </div>
-                </NormalCityWrapper>
-            )
-        })
+        const Cities = () => {
+            if (!cities) return <></>
+            return Object.keys(cities).sort().map((key: string) => {
+                return (
+                    <NormalCityWrapper key={key}>
+                        <Key id={key}>{key}</Key>
+                        <div>
+                            {cities[key].map((item: any) => {
+                                return <City key={item.id} onClick={() => onCityClick(item)}>{item.name}</City>
+                            })}
+                        </div>
+                    </NormalCityWrapper>
+                )
+            })
+        }
 
         return (
             <CityWrapper showCities={showCities}>
@@ -103,7 +135,7 @@ const CityList: React.FC<Props> =
                                 <>
                                     <Key>Recent Searches:</Key>
                                     <HotCityWrapper>
-                                        {recentSearches.map((item: any) => {
+                                        {recentSearches?.map((item: any) => {
                                             return (
                                                 <CityBox key={item} onClick={() => onCityClick(item)}>{item}</CityBox>
                                             )
@@ -112,18 +144,19 @@ const CityList: React.FC<Props> =
                                 </>
                             }
                             <AnchorWrapper>
-                                {Anchors}
+                                {!isCitiesLoading && Anchors()}
                             </AnchorWrapper>
                             <Key>Hot Cities:</Key>
                             <HotCityWrapper>
-                                {hotcities.map((item: any) => {
+                                {hotcities?.map((item: any) => {
                                     return (
                                         <CityBox key={item.id} onClick={() => onCityClick(item)}>{item.name}</CityBox>
                                     )
                                 })}
                             </HotCityWrapper>
-                            {Cities}
-                        </>}
+                            {isCitiesLoading ? <div>Loading...</div> : Cities()}
+                        </>
+                }
             </CityWrapper>
         )
     }

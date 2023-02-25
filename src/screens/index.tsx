@@ -1,26 +1,13 @@
-import React from 'react'
-import { Outlet, useNavigate, NavLink } from 'react-router-dom'
+import { Outlet, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { color, font, zIndexValues } from '@/shared/styles/styles'
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
-import HelpIcon from '@mui/icons-material/Help';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import GradeIcon from '@mui/icons-material/Grade';
 
-const index = () => {
-    const navigate = useNavigate()
-
-    let activeStyle = {
-        textDecoration: "underline",
-        color: 'red'
-    };
-
-    const activeLink = ({ isActive }: { isActive: boolean }) => {
-        isActive ? activeStyle : undefined
-    }
-
+const Index = () => {
     return (
         <IndexPage>
             <Outlet />
@@ -79,4 +66,4 @@ const NavItem = styled(NavLink) <{ isActive?: boolean }>`
     }
 `
 
-export default index
+export default Index

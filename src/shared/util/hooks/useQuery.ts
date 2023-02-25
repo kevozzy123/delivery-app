@@ -1,17 +1,30 @@
 import { useRef, useCallback, useEffect } from 'react';
 import { isEqual } from 'lodash'
+import { AxiosRequestConfig } from 'axios';
 import api from '../http'
 import useMergeState from './useMergeState';
 import useDeepCompareMemoize from './deepCompareMemoize';
-import { IQueryOptions, IPropOptions, IApiState } from '@/shared/types';
+import { IQueryOptions, IApiState } from '@/shared/types';
 
 const CACHE_FIRST = 'cache-first'
 const NO_CACHE = 'no-cache'
 const CACHE_ONLY = 'cache-only'
 
+
+type Result = [
+    {
+        data: any | null,
+        error: any | null,
+        isLoading: boolean,
+        variables: any,
+        setLocalData: (getUpdatedData: any) => void
+    },
+    (newVariable?: any) => void
+]
+
 const useQuery = (
     url: string,
-    propsVariable: IPropOptions = {},
+    propsVariable: any = {},
     options: IQueryOptions = {}
 ) => {
     const { lazy = false, cachePolicy = '' } = options
@@ -50,6 +63,7 @@ const useQuery = (
 
             wasCalled.current = true
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         , [propsMemoized]
     )
 
@@ -58,7 +72,7 @@ const useQuery = (
         if (canUseCache && cachePolicy === CACHE_ONLY) return
 
         sendRequest()
-    }, [sendRequest])
+    }, [sendRequest, cachePolicy, canUseCache, isSleeping])
 
     const setLocalData = useCallback((getUpdatedData: any) => {
         mergeState(({ data }) => {
@@ -68,14 +82,18 @@ const useQuery = (
         })
     }, [mergeState, url])
 
-    return [
+    const results: Result = [
         {
-            ...state,
+            data: state.data,
+            error: state.error,
+            isLoading: state.isLoading,
             variables: { ...propsMemoized, ...state.variables },
             setLocalData,
         },
-        sendRequest,
+        sendRequest
     ];
+
+    return results
 }
 
 const cache: { [key: string]: { data: any, apiVariable: any } } = {}
