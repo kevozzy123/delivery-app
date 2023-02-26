@@ -3,12 +3,21 @@ import { mixin, font, color } from '@/shared/styles/styles'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
-const Categories = ({ categories }: { categories: any }) => {
+const Categories = ({ categories, isLoading }:
+    { categories: any, isLoading: boolean }) => {
     const navigate = useNavigate()
+
+    if (isLoading) {
+        return (
+            <Wrapper>
+                <div>hhh</div>
+            </Wrapper>
+        )
+    }
 
     return (
         <Wrapper>
-            {categories.map((item: any) => {
+            {categories && categories.map((item: any) => {
                 return (
                     <Item key={item.id}
                         onClick={() => navigate('/categories/' + item.id)}

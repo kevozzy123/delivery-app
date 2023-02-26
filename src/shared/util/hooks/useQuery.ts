@@ -1,6 +1,5 @@
 import { useRef, useCallback, useEffect } from 'react';
 import { isEqual } from 'lodash'
-import { AxiosRequestConfig } from 'axios';
 import api from '../http'
 import useMergeState from './useMergeState';
 import useDeepCompareMemoize from './deepCompareMemoize';
@@ -9,7 +8,6 @@ import { IQueryOptions, IApiState } from '@/shared/types';
 const CACHE_FIRST = 'cache-first'
 const NO_CACHE = 'no-cache'
 const CACHE_ONLY = 'cache-only'
-
 
 type Result = [
     {
@@ -27,7 +25,7 @@ const useQuery = (
     propsVariable: any = {},
     options: IQueryOptions = {}
 ) => {
-    const { lazy = false, cachePolicy = '' } = options
+    const { lazy = false, cachePolicy = CACHE_FIRST } = options
 
     const wasCalled = useRef(false)
     const propsMemoized = useDeepCompareMemoize(propsVariable)
@@ -49,7 +47,9 @@ const useQuery = (
             const apiVariable = { ...propsMemoized, ...variables }
 
             const skipLoading = canUseCache && cachePolicy === CACHE_FIRST
-
+            // console.log('can use cache', skipLoading)
+            console.log('can use cache', canUseCache)
+            console.log('policy', cachePolicy === CACHE_FIRST)
             if (!skipLoading) {
                 mergeState({ isLoading: true, variables });
             } else if (newVariable) {

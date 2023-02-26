@@ -24,7 +24,8 @@ const CityList: React.FC<Props> =
         const dispatch = useDispatch()
         const [{
             data: cities,
-            isLoading: isCitiesLoading
+            isLoading: isCitiesLoading,
+            error
         }] = useHttp.get('/v1/cities', {
             type: "group"
         })

@@ -23,7 +23,12 @@ const api = <V>(method: string, url: string, variables: V) => {
             params: method.toLowerCase() === 'get' ? variables : undefined,
             // paramsSerializer: 
         })
-            .then((res) => resolve(res.data))
+            .then((res) => {
+                if (res.data.status === 0) {
+                    reject(res.data)
+                }
+                resolve(res.data)
+            })
             .catch((error: AxiosError<any>) => {
                 if (error.response) {
                     if (error.response.data.error.code === 'invalidToken') {

@@ -1,5 +1,4 @@
-import create from '@ant-design/icons/lib/components/IconFont';
-import { createSlice, configureStore } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface DefaultValue extends Location {
     recentSearches: Location[]
@@ -14,8 +13,8 @@ export interface Location {
 
 const initialValue: DefaultValue = {
     name: null,
-    latitude: null,
-    longitude: null,
+    latitude: 31.22967,
+    longitude: 121.4762,
     pingyin: null,
     recentSearches: JSON.parse(localStorage.getItem('recentLocations') || '[]')
 }

@@ -5,42 +5,49 @@ import { color, font, sizes, zIndexValues, mixin } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
 import Categories from './Categories';
 import SubList from './SubList';
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CityList from './CityList';
+import LocalDiningIcon from '@mui/icons-material/LocalDining';
+import useHttp from '@/shared/util/hooks/useApi';
+import { useSelector } from 'react-redux';
+import { RootStore } from '@/shared/store';
 
 const Homepage = () => {
     const navigate = useNavigate()
-    const [list, setList] = useState([])
-    const [categories, setCategories] = useState([])
-    const [restaurentList, setRestaurantList] = useState([])
+    const longitude = useSelector<RootStore, number | null>(state => state.location.longitude)
+    const latitude = useSelector<RootStore, number | null>(state => state.location.latitude)
     const [showCities, setShowCities] = useState(false)
+    const [{
+        data: list,
+        isLoading: isListLoading,
+        error: listError
+    }, getList] = useHttp.get('/shopping/restaurants', {
+        latitude: latitude || 31.22967,
+        longitude: longitude || 121.4762,
+        limit: 20
+    })
 
-    useEffect(() => {
-        // fetch('https://elm.cangdu.org/shopping/restaurants?latitude=31.22967&longitude=121.4762&limit=30', {
-        //     method: 'GET'
-        // }).then(res => res.json())
-        //     .then(data => {
-        //         setList(data)
-        //     })
+    const [{
+        data: restaurentList,
+        error: restaurentError,
+        isLoading: isResLoading
+    }, getRestaurants] = useHttp.get('/shopping/v2/restaurant/category')
 
+    const [{
+        data: categories,
+        isLoading: isCategoryLoading,
+        error: cateError
+    }] = useHttp.get('/v2/index_entry')
 
-        fetch('https://elm.cangdu.org/shopping/v2/restaurant/category', {
-            method: 'GET'
-        }).then(res => res.json())
-            .then(data => {
-                setRestaurantList(data)
-            })
+    // if any error happens, fallback the entire page to error page
+    if (listError || cateError || restaurentError) {
+        return <div>Full page error</div>
+    }
 
-        fetch('https://elm.cangdu.org/v2/index_entry', {
-            method: 'GET'
-        }).then(res => res.json())
-            .then(data => {
-                setCategories(data)
-            })
-    }, [])
-
+    if (isCategoryLoading || isResLoading || isListLoading) {
+        return <div>Full page Loading</div>
+    }
 
     return (
         <PageWrapper>
@@ -54,57 +61,59 @@ const Homepage = () => {
                     onClick={() => setShowCities(true)}
                 />
             </TopBar>
-            <Categories categories={categories} />
-            {restaurentList.map((restaurant: any) => {
-                return (
-                    <div key={restaurant.id}>
-                        <SubList list={restaurant} />
-                    </div>
-                )
-            })}
+            <Categories categories={categories} isLoading={isCategoryLoading} />
+            {
+                isResLoading ? <div>loading...</div> : restaurentList.map((restaurant: any) => {
+                    return (
+                        <div key={restaurant.id}>
+                            <SubList list={restaurant} />
+                        </div>
+                    )
+                })}
             <List>
                 <TitleLarge>More Options</TitleLarge>
                 {
-                    list.map((item: any) => {
-                        return (
-                            <ListItem key={item.id}>
-                                <Img
-                                    onClick={() => { navigate('/restaurant/' + item.id) }}
-                                    src={'//elm.cangdu.org/img/' + item.image_path}
-                                    alt="thumbnail" />
-                                <InfoWrapper>
-                                    <Title>
-                                        <LocalDiningIcon />{item.name}
-                                    </Title>
-                                    <InfoItem>
-                                        <p>{item.category}</p>
-                                        <p>{item.distance}</p>
-                                    </InfoItem>
-                                    <InfoItem>
-                                        <p>Minimum price: ¥{item.float_minimum_order_amount}</p>
-                                        <p>{item.order_lead_time}</p>
-                                    </InfoItem>
-                                    <InfoItem>
-                                        <Rating highScore={item.rating > 4.5}>
-                                            {item.rating}
-                                            <Star highScore={item.rating > 4.5} style={{ fontSize: '18px' }} />
-                                            <span>({item.rating_count})</span>
-                                        </Rating>
-                                        <p>¥{item.float_delivery_fee} delivery fee</p>
-                                    </InfoItem>
-                                    <InfoItem justifyContent={false}>
-                                        {item.supports?.map((supp: any, index: number) => {
-                                            return (
-                                                <Support key={supp.id}>
-                                                    {supp.name}
-                                                </Support>
-                                            )
-                                        })}
-                                    </InfoItem>
-                                </InfoWrapper>
-                            </ListItem>
-                        )
-                    })
+                    isListLoading ? <div>loading...</div>
+                        : list.map((item: any) => {
+                            return (
+                                <ListItem key={item.id}>
+                                    <Img
+                                        onClick={() => { navigate('/restaurant/' + item.id) }}
+                                        src={'//elm.cangdu.org/img/' + item.image_path}
+                                        alt="thumbnail" />
+                                    <InfoWrapper>
+                                        <Title>
+                                            <LocalDiningIcon />{item.name}
+                                        </Title>
+                                        <InfoItem>
+                                            <p>{item.category}</p>
+                                            <p>{item.distance}</p>
+                                        </InfoItem>
+                                        <InfoItem>
+                                            <p>Minimum price: ¥{item.float_minimum_order_amount}</p>
+                                            <p>{item.order_lead_time}</p>
+                                        </InfoItem>
+                                        <InfoItem>
+                                            <Rating highScore={item.rating > 4.5}>
+                                                {item.rating}
+                                                <Star highScore={item.rating > 4.5} style={{ fontSize: '18px' }} />
+                                                <span>({item.rating_count})</span>
+                                            </Rating>
+                                            <p>¥{item.float_delivery_fee} delivery fee</p>
+                                        </InfoItem>
+                                        <InfoItem justifyContent={false}>
+                                            {item.supports?.map((supp: any, index: number) => {
+                                                return (
+                                                    <Support key={supp.id}>
+                                                        {supp.name}
+                                                    </Support>
+                                                )
+                                            })}
+                                        </InfoItem>
+                                    </InfoWrapper>
+                                </ListItem>
+                            )
+                        })
                 }
             </List>
             <CityList showCities={showCities} closeShowCities={() => setShowCities(false)} />
