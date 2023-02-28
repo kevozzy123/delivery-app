@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { zIndexValues, color, sizes, font } from '@/shared/styles/styles'
 import CloseIcon from '@mui/icons-material/Close';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useSelector, useDispatch } from 'react-redux'
 import { RootStore } from '@/shared/store';
 import { setLocation, clearSearchHistory, Location } from '@/shared/store/locationSlice'
 import useHttp from '@/shared/util/hooks/useApi';
-import { group } from 'console';
 
 interface Props {
     showCities: boolean,
@@ -31,7 +31,6 @@ const CityList: React.FC<Props> =
         })
         const [{
             data: hotcities,
-            isLoading: isHotCitiesLoading
         }] = useHttp.get('/v1/cities', {
             type: 'hot'
         })
@@ -44,30 +43,9 @@ const CityList: React.FC<Props> =
                 setCityOnlyList(flattened)
             }
 
-            console.log(cities)
-            console.log(hotcities)
+            // console.log(cities)
+            // console.log(hotcities)
         }, [cities, hotcities])
-
-        // useEffect(() => {
-        //     fetch('https://elm.cangdu.org/v1/cities?type=group', {
-        //         method: 'GET'
-        //     }).then(res => res.json())
-        //         .then(data => {
-        //             console.log(data)
-        //             setCities(data)
-        //             let flattened = Object.keys(data).map((key: string) => {
-        //                 return data[key]
-        //             }).flat(2)
-        //             setCityOnlyList(flattened)
-        //         })
-
-        //     fetch('https://elm.cangdu.org/v1/cities?type=hot', {
-        //         method: 'GET'
-        //     }).then(res => res.json())
-        //         .then(data => {
-        //             setHotCities(data)
-        //         })
-        // }, [])
 
         const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             let value = e.target.value
@@ -105,6 +83,12 @@ const CityList: React.FC<Props> =
                     </NormalCityWrapper>
                 )
             })
+        }
+
+        if (isCitiesLoading) {
+            return (
+                <CircularProgress />
+            )
         }
 
         return (

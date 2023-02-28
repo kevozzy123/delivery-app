@@ -30,8 +30,9 @@ const useQuery = (
     const wasCalled = useRef(false)
     const propsMemoized = useDeepCompareMemoize(propsVariable)
     const isSleeping = lazy && !wasCalled.current
-    const isCacheAvailable = cache[url] && isEqual(cache[url].apiVariable, propsVariable)
+    const isCacheAvailable = cache[url] && isEqual(cache[url]?.apiVariable, propsVariable)
     const canUseCache = isCacheAvailable && !wasCalled.current && cachePolicy !== NO_CACHE
+    // const canUseCache = isCacheAvailable && cachePolicy !== NO_CACHE
 
     // array doesn't work here
     const { state, mergeState } = useMergeState<IApiState>({
@@ -47,13 +48,17 @@ const useQuery = (
             const apiVariable = { ...propsMemoized, ...variables }
 
             const skipLoading = canUseCache && cachePolicy === CACHE_FIRST
-            // console.log('can use cache', skipLoading)
-            console.log('can use cache', canUseCache)
-            console.log('policy', cachePolicy === CACHE_FIRST)
+
+            // console.log('can use cache', isEqual(cache[url]?.apiVariable, propsVariable))
+            // console.log(cache[url]?.apiVariable, propsVariable)
+
             if (!skipLoading) {
                 mergeState({ isLoading: true, variables });
             } else if (newVariable) {
                 mergeState({ variables });
+            } else {
+                console.log('using cache')
+                return
             }
 
             api.get(url, apiVariable).then(data => {
@@ -72,7 +77,8 @@ const useQuery = (
         if (canUseCache && cachePolicy === CACHE_ONLY) return
 
         sendRequest()
-    }, [sendRequest, cachePolicy, canUseCache, isSleeping])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sendRequest, cachePolicy, isSleeping])
 
     const setLocalData = useCallback((getUpdatedData: any) => {
         mergeState(({ data }) => {

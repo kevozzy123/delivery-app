@@ -47,8 +47,8 @@ const Wrapper = styled.section`
         width: 100%;
         content: '';
         background-color: ${color.backgroundLight};
-        border-top: 1px solid ${color.backgroundMedium};
-        border-bottom: 1px solid ${color.backgroundMedium};
+        border-top: 1px solid ${color.borderLight};
+        border-bottom: 1px solid ${color.borderLight};
         position: absolute;
         display: block;
         bottom: 0rem;

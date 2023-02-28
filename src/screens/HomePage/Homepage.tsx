@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { color, font, sizes, zIndexValues, mixin } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
+import CircularProgress from '@mui/material/CircularProgress';
 import Categories from './Categories';
 import SubList from './SubList';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -46,7 +47,7 @@ const Homepage = () => {
     }
 
     if (isCategoryLoading || isResLoading || isListLoading) {
-        return <div>Full page Loading</div>
+        return <LoadingIcon />
     }
 
     return (
@@ -122,7 +123,15 @@ const Homepage = () => {
 }
 
 const PageWrapper = styled.main`
+    
+`
 
+
+const LoadingIcon = styled(CircularProgress)`
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `
 
 const TopBar = styled.div`

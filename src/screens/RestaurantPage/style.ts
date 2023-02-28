@@ -5,6 +5,7 @@ import StarIcon from '@mui/icons-material/Star';
 export const PageWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    /* align-items: center; */
     margin-top: -60px;
 `
 
@@ -26,6 +27,7 @@ export const Title = styled.h2`
 export const FlexWrapper = styled.div`
     display: flex;
     align-items: center;
+    margin: .5rem 0;
 `
 
 export const Img = styled.img`
@@ -40,9 +42,9 @@ export const Header = styled.header`
     span{
         margin-right:.5rem;
     }
-    /* &> div, & > h2 {
-        margin: .25rem 0;
-    } */
+    div, h2{
+        /* margin: .25rem 0; */
+    }
 `
 
 export const Rating = styled.div`
@@ -106,7 +108,8 @@ export const Support = styled.div<{
 `
 
 export const MenuSection = styled.div`
-    padding: 1rem;
+    width: 100%;
+    /* padding: 1rem; */
     & h3 {
         ${font.size(24)}
         margin: .25rem 0;
@@ -114,6 +117,13 @@ export const MenuSection = styled.div`
     & p {
         color: ${color.textMedium}
     }
+`
+
+export const ItemName = styled.h4`
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 `
 
 export const MenuItem = styled.div`

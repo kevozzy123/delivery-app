@@ -21,7 +21,7 @@ function App() {
         <Route path='/' element={<IndexPage />}>
           <Route index element={<Homepage />} />
           <Route path='/categories/:id' element={<Homepage />} />
-          <Route path='restaurant/:id' element={<RestaurantPage />} />
+          <Route path='restaurant/:id' element={SuspenceComponent(RestaurantPage)} />
           <Route path='/*' element={SuspenceComponent(NotCompletePage)} />
         </Route>
         <Route path='/login' element={SuspenceComponent(LoginPage)} />
