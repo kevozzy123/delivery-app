@@ -24,9 +24,6 @@ const api = <V>(method: string, url: string, variables: V) => {
             // paramsSerializer: 
         })
             .then((res) => {
-                if (res.data.status === 0) {
-                    reject(res.data)
-                }
                 resolve(res.data)
             })
             .catch((error: AxiosError<any>) => {

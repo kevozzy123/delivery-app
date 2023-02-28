@@ -42,15 +42,15 @@ const useQuery = (
         variables: {}
     })
 
+
+    // console.log('can use cache', isEqual(cache[url]?.apiVariable, propsVariable))
+    // console.log(cache[url]?.apiVariable, propsVariable)
     const sendRequest = useCallback(
         (newVariable?: any) => {
             const variables = { ...state.variables, ...(newVariable || {}) }
             const apiVariable = { ...propsMemoized, ...variables }
 
             const skipLoading = canUseCache && cachePolicy === CACHE_FIRST
-
-            // console.log('can use cache', isEqual(cache[url]?.apiVariable, propsVariable))
-            // console.log(cache[url]?.apiVariable, propsVariable)
 
             if (!skipLoading) {
                 mergeState({ isLoading: true, variables });
@@ -61,10 +61,15 @@ const useQuery = (
                 return
             }
 
-            api.get(url, apiVariable).then(data => {
-                cache[url] = { data, apiVariable }
-                mergeState({ data, error: null, isLoading: false })
-            })
+            api.get(url, apiVariable)
+                .then(data => {
+                    cache[url] = { data, apiVariable }
+                    mergeState({ data, error: null, isLoading: false })
+                })
+                .catch((error) => {
+                    console.log(error)
+                    mergeState({ error, data: null, isLoading: false });
+                })
 
             wasCalled.current = true
         }

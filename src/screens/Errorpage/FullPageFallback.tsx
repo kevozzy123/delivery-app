@@ -4,7 +4,8 @@ import styled from 'styled-components'
 const FullPageFallback = () => {
     return (
         <div>
-            <ErrorImg src={'/img/error.jpg'} />
+            12121212
+            {/* <ErrorImg src={'/img/error.jpg'} /> */}
         </div>
     )
 }
