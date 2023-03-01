@@ -9,6 +9,22 @@ export const PageWrapper = styled.div`
     margin-top: -60px;
 `
 
+export const MenuBar = styled.div<{
+    showBar: boolean
+}>`
+    width: 100%;
+    overflow: auto;
+    height: fit-content;
+    padding: 1rem;
+    background-color: white;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid ${color.borderLight};
+    display: ${props => props.showBar ? 'block' : 'none'};
+    display: flex;
+    align-items: center;
+`
+
 export const Content = styled.div`
     width: 100%;
 `
@@ -113,6 +129,7 @@ export const MenuSection = styled.div`
     & h3 {
         ${font.size(24)}
         margin: .25rem 0;
+        padding: 1rem;
     }
     & p {
         color: ${color.textMedium}
@@ -129,7 +146,7 @@ export const ItemName = styled.h4`
 export const MenuItem = styled.div`
     display: flex;
     justify-content: space-between;
-    padding: 2rem 0;
+    padding: 2rem 1rem;
     border-bottom: 1px solid ${color.borderLight};
     & div {
         display: flex;

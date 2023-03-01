@@ -12,6 +12,7 @@ export default createGlobalStyle`
     font-family: 'Roboto', sans-serif;
     height: 100%;
     width: 100%;
+    max-width: 100vw;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -23,7 +24,7 @@ export default createGlobalStyle`
     line-height: 1.2;
     ${font.size(16)}
     padding: 60px 0 0;
-    max-width: 700px;
+    /* max-width: 700px; */
   }
 
   #root {

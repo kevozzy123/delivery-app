@@ -47,9 +47,12 @@ const Button: React.FC<BProps> = forwardRef<HTMLButtonElement, BProps>(({
 })
 
 export const RoundButton = styled.button`
-      height: 30px;
+    height: 30px;
     width: 30px;
     position: absolute;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
     left: 1rem;
     background-color: white;
     border-radius: 50%;

@@ -32,6 +32,16 @@ const LoadingSkeleton = () => {
     )
 }
 
+export const MenuSkeleton = () => {
+    return (
+        <Skeleton
+            height={25}
+            width="30%"
+            style={style}
+        />
+    )
+}
+
 const SkeletonWrapper = styled.div`
     margin-top: -60px;
 `

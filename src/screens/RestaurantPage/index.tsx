@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useTransition } from 'react'
+import React, { useEffect, useState, useCallback, useTransition, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { getImgPath } from '@/shared/util/image'
 import useHttp from '@/shared/util/hooks/useApi'
@@ -19,14 +19,16 @@ import {
     MenuSection,
     MenuItem,
     Avatar,
-    ItemName
+    ItemName,
+    MenuBar
 } from './style'
 import { pickRandom, splitStr } from '@/shared/util/javascript';
 import TopBar from './TopOptions'
-import LoadingSkeleton from './LoadingSkeleton';
+import LoadingSkeleton, { MenuSkeleton } from './LoadingSkeleton';
 
 const RestaurantPage = () => {
     const { id } = useParams()
+    const [showNav, setShowNav] = useState(false)
     const [{
         data: restaurantInfo,
         isLoading: isResLoading,
@@ -41,18 +43,44 @@ const RestaurantPage = () => {
         restaurant_id: id
     })
 
+    useEffect(() => {
+        const showNavDetection = function () {
+            if (window.scrollY > 550) {
+                setShowNav(true)
+            } else {
+                setShowNav(false)
+            }
+        }
+
+        window.addEventListener('scroll', showNavDetection)
+
+        return () => {
+            window.removeEventListener('scroll', showNavDetection)
+        }
+    }, [])
+
     const MenuComp = () => {
         if (isMenuLoading) {
-            return <div>Loading...</div>
+            return <MenuSkeleton />
         }
 
         return (
             <div style={{ width: '100%' }}>
+                <MenuBar showBar={showNav}>
+                    {
+                        menu && menu.map((section: any) => {
+                            return (
+                                <div key={section.id}>
+                                    {section.name}
+                                </div>
+                            )
+                        })
+                    }
+                </MenuBar>
                 {menu && menu.map((section: any) => {
                     return (
                         <MenuSection key={section.id}>
                             <h3>{section.name}</h3>
-                            <p>{section.description}</p>
                             {
                                 section.foods.map((item: any) => {
                                     return (
@@ -86,15 +114,9 @@ const RestaurantPage = () => {
         return <FullPageFallback />
     }
 
-    // if (true) {
-    //     return (
-    //         <LoadingSkeleton />
-    //     )
-    // }
-
     return (
         <PageWrapper>
-            <TopBar />
+            <TopBar restaurantInfo={restaurantInfo} />
             {restaurantInfo &&
                 <Content>
                     <ImgContainer>
@@ -116,8 +138,8 @@ const RestaurantPage = () => {
                                     )
                                 })}
                             </Rating>
-                            <span>{restaurantInfo?.rating}</span>
-                            <span> ({restaurantInfo?.rating_count})</span>
+                            <span style={{ marginTop: '2px' }}>{restaurantInfo?.rating}</span>
+                            <span style={{ marginTop: '2px' }}> ({restaurantInfo?.rating_count})</span>
                         </FlexWrapper>
                         <FlexWrapper>
                             <span> {splitStr(restaurantInfo?.opening_hours[0], '/')[0]} -</span>
