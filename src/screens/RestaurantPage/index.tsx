@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useCallback, useTransition, useRef } from 'react'
-import { useParams } from 'react-router-dom'
-import { getImgPath } from '@/shared/util/image'
-import useHttp from '@/shared/util/hooks/useApi'
-import FullPageFallback from '../Errorpage/FullPageFallback'
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import useHttp from '@/shared/util/hooks/useApi';
+import FullPageFallback from '../Errorpage/FullPageFallback';
 import {
     PageWrapper,
     Content,
@@ -20,15 +19,19 @@ import {
     MenuItem,
     Avatar,
     ItemName,
-    MenuBar
-} from './style'
+    MenuBar,
+    MenuBarItem
+} from './style';
 import { pickRandom, splitStr } from '@/shared/util/javascript';
 import TopBar from './TopOptions'
 import LoadingSkeleton, { MenuSkeleton } from './LoadingSkeleton';
 
 const RestaurantPage = () => {
-    const { id } = useParams()
-    const [showNav, setShowNav] = useState(false)
+    const { id } = useParams();
+    const { hash } = useLocation();
+    const sectionRefs = useRef<HTMLDivElement[]>([]);
+    const [showNav, setShowNav] = useState(false);
+
     const [{
         data: restaurantInfo,
         isLoading: isResLoading,
@@ -59,6 +62,33 @@ const RestaurantPage = () => {
         }
     }, [])
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Set the active section to the section that is intersecting the viewport
+                        // setActiveSection(entry.target.id);
+                        console.log(entry.target.id)
+                        // window.history.replaceState(null, "id", `#${entry.target.id}`)
+                    }
+                });
+            },
+            {
+                rootMargin: '-50% 0px -50% 0px' // adjust this based on your requirements
+            }
+        );
+
+        // Observe all section refs
+        sectionRefs.current.forEach(ref => observer.observe(ref));
+
+        return () => {
+            // Unobserve all section refs when component is unmounted
+            console.log(sectionRefs.current)
+            // sectionRefs.current.forEach(ref => observer.unobserve(ref));
+        };
+    }, [menu]);
+
     const MenuComp = () => {
         if (isMenuLoading) {
             return <MenuSkeleton />
@@ -67,19 +97,24 @@ const RestaurantPage = () => {
         return (
             <div style={{ width: '100%' }}>
                 <MenuBar showBar={showNav}>
+                    <MenuBarItem>分类：</MenuBarItem>
                     {
                         menu && menu.map((section: any) => {
                             return (
-                                <div key={section.id}>
+                                <MenuBarItem key={section.id} href={'#' + section.id}>
                                     {section.name}
-                                </div>
+                                </MenuBarItem>
                             )
                         })
                     }
                 </MenuBar>
-                {menu && menu.map((section: any) => {
+                {menu && menu.map((section: any, index: number) => {
                     return (
-                        <MenuSection key={section.id}>
+                        <MenuSection
+                            key={section.id}
+                            id={section.id}
+                            ref={(el: HTMLDivElement) => (sectionRefs.current[index] = el)}
+                        >
                             <h3>{section.name}</h3>
                             {
                                 section.foods.map((item: any) => {

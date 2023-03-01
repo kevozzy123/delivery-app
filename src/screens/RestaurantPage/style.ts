@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { font, sizes, color } from '@/shared/styles/styles'
 import StarIcon from '@mui/icons-material/Star';
+import { Link } from 'react-router-dom';
 
 export const PageWrapper = styled.div`
     display: flex;
@@ -17,12 +18,23 @@ export const MenuBar = styled.div<{
     height: fit-content;
     padding: 1rem;
     background-color: white;
-    position: sticky;
+    position: ${props => props.showBar ? 'sticky' : 'absolute'};
     top: 0;
     border-bottom: 1px solid ${color.borderLight};
-    display: ${props => props.showBar ? 'block' : 'none'};
+    opacity: ${props => props.showBar ? 1 : 0};
+    pointer-events: ${props => props.showBar ? 'auto' : 'none'};
     display: flex;
     align-items: center;
+`
+
+interface IMenuBar {
+
+}
+
+export const MenuBarItem = styled.a`
+    ${font.bold};
+    margin-right: 1.5rem;
+    white-space: nowrap;
 `
 
 export const Content = styled.div`
@@ -127,7 +139,7 @@ export const MenuSection = styled.div`
     width: 100%;
     /* padding: 1rem; */
     & h3 {
-        ${font.size(24)}
+        ${font.size(28)}
         margin: .25rem 0;
         padding: 1rem;
     }
