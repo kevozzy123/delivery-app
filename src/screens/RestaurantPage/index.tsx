@@ -89,6 +89,13 @@ const RestaurantPage = () => {
         };
     }, [menu]);
 
+    function scrollToSection(sectionId: number | string) {
+        const section = document.getElementById(sectionId.toString());
+        if (section) {
+            section.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+
     const MenuComp = () => {
         if (isMenuLoading) {
             return <MenuSkeleton />
@@ -101,7 +108,15 @@ const RestaurantPage = () => {
                     {
                         menu && menu.map((section: any) => {
                             return (
-                                <MenuBarItem key={section.id} href={'#' + section.id}>
+                                <MenuBarItem
+                                    key={section.id}
+                                    onClick={() => {
+                                        const newUrl = `${window.location.origin}${window.location.pathname}#${section.id}`;
+                                        window.history.replaceState({ path: newUrl }, '', newUrl);
+                                        scrollToSection(section.id);
+                                    }}
+                                    href={'#' + section.id}
+                                >
                                     {section.name}
                                 </MenuBarItem>
                             )
