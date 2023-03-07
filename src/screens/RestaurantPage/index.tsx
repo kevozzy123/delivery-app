@@ -66,34 +66,43 @@ const RestaurantPage = () => {
         const observer = new IntersectionObserver(
             entries => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Set the active section to the section that is intersecting the viewport
-                        // setActiveSection(entry.target.id);
-                        console.log(entry.target.id)
-                        // window.history.replaceState(null, "id", `#${entry.target.id}`)
-                    }
+                    // console.log(entry.target.id, entry.intersectionRatio, entry.isIntersecting);
+                    // if (entry.isIntersecting) {
+                    //     console.log(entry.target.id)
+                    // }
                 });
             },
             {
-                rootMargin: '-50% 0px -50% 0px' // adjust this based on your requirements
+                root: null,
+                rootMargin: '0px' // adjust this based on your requirements
             }
         );
 
         // Observe all section refs
+        console.log('========', sectionRefs.current)
         sectionRefs.current.forEach(ref => observer.observe(ref));
 
         return () => {
             // Unobserve all section refs when component is unmounted
-            console.log(sectionRefs.current)
-            // sectionRefs.current.forEach(ref => observer.unobserve(ref));
+            // console.log(sectionRefs.current)
+            sectionRefs.current.forEach((ref: Element) => {
+                if (ref) observer.unobserve(ref)
+            });
         };
-    }, [menu]);
+    }, [menu, sectionRefs]);
 
     function scrollToSection(sectionId: number | string) {
         const section = document.getElementById(sectionId.toString());
         if (section) {
             section.scrollIntoView({ behavior: "smooth" });
         }
+    }
+
+    function jumpToSection(sectionId: number) {
+        const newUrl =
+            `${window.location.origin}${window.location.pathname}#${sectionId}`;
+        window.history.replaceState({ path: newUrl }, '', newUrl);
+        scrollToSection(sectionId);
     }
 
     const MenuComp = () => {
@@ -111,9 +120,7 @@ const RestaurantPage = () => {
                                 <MenuBarItem
                                     key={section.id}
                                     onClick={() => {
-                                        const newUrl = `${window.location.origin}${window.location.pathname}#${section.id}`;
-                                        window.history.replaceState({ path: newUrl }, '', newUrl);
-                                        scrollToSection(section.id);
+                                        jumpToSection(section.id)
                                     }}
                                     href={'#' + section.id}
                                 >

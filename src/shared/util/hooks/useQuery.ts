@@ -42,9 +42,6 @@ const useQuery = (
         variables: {}
     })
 
-
-    // console.log('can use cache', isEqual(cache[url]?.apiVariable, propsVariable))
-    // console.log(cache[url]?.apiVariable, propsVariable)
     const sendRequest = useCallback(
         (newVariable?: any) => {
             const variables = { ...state.variables, ...(newVariable || {}) }

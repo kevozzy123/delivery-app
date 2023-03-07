@@ -42,7 +42,7 @@ const Wrapper = styled.section`
     align-items: center;
     padding: 1rem 1rem 2rem;
     position: relative;
-     &::before {
+     /* &::before {
         height: 8px;
         width: 100%;
         content: '';
@@ -54,7 +54,7 @@ const Wrapper = styled.section`
         bottom: 0rem;
         left: 0;
         right: 0;
-    }
+    } */
 `
 
 const Img = styled.img`

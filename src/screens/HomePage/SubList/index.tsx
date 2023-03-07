@@ -79,7 +79,7 @@ const Img = styled.img`
     margin-bottom: 1rem;
     object-fit: cover;
     border-radius: ${sizes.smallBorderRadius};
-    background-color: ${color.backgroundDarkPrimary};
+    background-color: ${color.backgroundLight};
 `
 
 export default SubList

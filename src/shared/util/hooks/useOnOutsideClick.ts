@@ -7,12 +7,12 @@ interface ClickOutsideProps {
     onOutsideClick: () => void,
     $listeningElementRef: React.MutableRefObject<HTMLElement>,
 }
-const useOnClickOutside = ({
-    $ignoredElementRefs,
-    isListening,
-    onOutsideClick,
-    $listeningElementRef
-}: ClickOutsideProps) => {
+const useOnClickOutside = (
+    $ignoredElementRefs: React.MutableRefObject<HTMLElement>,
+    isListening: boolean,
+    onOutsideClick: () => void,
+    $listeningElementRef: React.MutableRefObject<HTMLElement>
+) => {
     const $mouseDownTargetRef = useRef<EventTarget | null>()
     const $ignoredElementRefsMemoized = useDeepCompareMemoize([$ignoredElementRefs].flat())
 

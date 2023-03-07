@@ -1,12 +1,25 @@
-import { LazyExoticComponent, Suspense, lazy } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { LazyExoticComponent, Suspense, lazy, useLayoutEffect, ReactNode, ReactElement } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import Homepage from './screens/HomePage/Homepage'
 import IndexPage from './screens'
 const LoginPage = lazy(() => import('@/screens/Authpage'))
 const RestaurantPage = lazy(() => import('./screens/RestaurantPage'))
 const NotCompletePage = lazy(() => import('./screens/Errorpage/NotCompleted'))
 
+// const LocationWrapper = (
+//   { children }: { children: ReactElement }
+// ) => {
+//   const location = useLocation();
+
+//   useLayoutEffect(() => {
+//     document.documentElement.scrollTo(0, 0)
+//   }, [location.pathname])
+
+//   return children
+// };
+
 function App() {
+
   const SuspenceComponent =
     (Component: LazyExoticComponent<React.FC<{}>>, props?: object) => {
       return (
@@ -17,6 +30,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* <LocationWrapper> */}
       <Routes>
         <Route path='/' element={<IndexPage />}>
           <Route index element={<Homepage />} />
@@ -26,6 +40,7 @@ function App() {
         </Route>
         <Route path='/login' element={SuspenceComponent(LoginPage)} />
       </Routes>
+      {/* </LocationWrapper> */}
     </BrowserRouter>
   )
 }
